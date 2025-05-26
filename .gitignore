@@ -3,3 +3,4 @@ __pycache__/
 *$py.class
 .DS_Store
 received_files/
+__pycache__/*
