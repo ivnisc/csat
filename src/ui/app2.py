@@ -30,6 +30,11 @@ class CSATApp(App):
         width: 100%;
     }
 
+    .column {
+        layout: vertical;
+        width: 4fr;
+    }
+
     .list {
         width: 1fr;
         border: round $accent;
@@ -39,10 +44,11 @@ class CSATApp(App):
     
     .messages {
         height: 1fr;
-        width: 4fr;
+        width: 100%;
         border: round $accent; # borde de los logs
         padding: 1;
         color: #ffffff;
+        overflow-y: scroll;
     }
 
     .input {
@@ -75,8 +81,11 @@ class CSATApp(App):
                     ListItem(Label("6. Enviar mensaje UDP")),
                     classes="list",
                 ),
-                
-                Static("", classes="messages"),
+                Container(
+                    Static("", classes="messages", id="client_msg"),
+                    Static("", classes="messages", id="server_msg"),
+                    classes="column",
+                ),
                 classes="row", 
             ),
             Input(placeholder="Escribe un mensaje...", classes="input"),
@@ -87,12 +96,14 @@ class CSATApp(App):
         """Configuración inicial"""
         self.title = "CSAT"
         self.sub_title = "Mensajería cliente-servidor y Análisis de Tráfico"
-        # Buscar widgets por clase
+        # buscar widgets por clase
         lista = self.query_one(".list", expect_type=ListView)
-        mensajes = self.query_one(".messages", expect_type=Static)
+        server_messages = self.query_one("#server_msg", expect_type=Static)
+        client_messages = self.query_one("#client_msg", expect_type=Static)
 
         lista.border_title = "Funciones"
-        mensajes.border_title = "Logs"  
+        server_messages.border_title = "Logs Servidor"
+        client_messages.border_title = "Logs Cliente"
 
     def LoadingIndicator(self):
         """Barrita de carga"""
