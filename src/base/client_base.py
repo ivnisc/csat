@@ -33,19 +33,3 @@ class BaseClient:
                 logger.info(f"IP de destino: {self.server_ip}")
                 logger.info(f"Puerto de destino: {self.server_port}")
             logger.info(f"Tiempo de envío: {timestamp}")
-
-    def _log_rtt(self, start_time, end_time):
-        """registra el tiempo de respuesta"""
-        rtt = (end_time - start_time)*1000
-        logger.info(f"RTT: {rtt:.2f}ms")
-
-    def close(self):
-        """cierra la conexión"""
-        if self.socket:
-            try:
-                self.socket.close()
-                logger.info("Conexión cerrada")
-            except Exception as e:
-                logger.error(f"Error al cerrar la conexión: {e}")
-            finally:
-                self.socket = None
