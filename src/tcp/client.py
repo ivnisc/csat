@@ -9,9 +9,9 @@ import time
 logger = logging.getLogger(__name__)
 
 class TCPClient(BaseClient):
-    def __init__(self, host='localhost', port=54321):
-        super().__init__(host)
-        self.port = port  # Puerto específico para TCP
+    def __init__(self, port=54321):
+        super().__init__()
+        self.port = port
 
     def connect(self):
         """establece conexión con el servidor"""
@@ -27,21 +27,14 @@ class TCPClient(BaseClient):
     def send_message(self, message):
         """envía un mensaje al servidor y recibe respuesta"""
         try:
-            start_time = time.time()
             self.socket.sendall(message.encode())
             self.message_count += 1
             
-            # Información del envío
+            # información del envío
             self._log_message_info(message, is_sending=True)
             
-            # Recibir respuesta
-            response = self.socket.recv(1024).decode()
-            end_time = time.time()
-            
-            # Información de la respuesta
-            logger.info(f"Respuesta recibida: {response}")
-            self._log_message_info(message, is_sending=False)
-            self._log_rtt(start_time, end_time)
+            # recibir respuesta (solo para mantener la conexión)
+            self.socket.recv(1024).decode()
             return True
         except Exception as e:
             logger.error(f"Error al enviar mensaje: {e}")
@@ -63,11 +56,11 @@ if __name__ == "__main__":
     if client.connect():
         try:
             print("\n=== Cliente TCP ===")
-            print("Ingresa mensajes (mínimo 5). Escribe 'end' para terminar.")
+            print("Ingresa mensajes (min 5). Escribe 'end' para terminar.")
             print("Cada mensaje se enviará inmediatamente al presionar Enter.")
             
             while True:
-                message = input("\nMensaje: ")
+                message = input()  # Quitamos el prompt
                 if message.lower() == 'end':
                     if client.message_count < 5:
                         print(f"Error: Debes enviar al menos 5 mensajes. Llevas {client.message_count}")
@@ -79,4 +72,4 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             logger.info("Programa interrumpido por el usuario")
         finally:
-            client.close() 
+            client.close()

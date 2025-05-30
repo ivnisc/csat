@@ -6,8 +6,17 @@ import threading
 import logging
 from datetime import datetime
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
+
+def used_port(port, host='0.0.0.0'):
+    """verificamso si un puerto está en uso"""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind((host, port))
+            return False
+        except socket.error:
+            return True
 
 class TCPServer:
     def __init__(self, host='0.0.0.0', port=54321):
@@ -17,12 +26,20 @@ class TCPServer:
         self.running = False
 
     def start(self):
-        """Inicia el servidor TCP"""
+        """inicia el servidor TCP"""
+        if used_port(self.port, self.host):
+            logger.info(f"El puerto {self.port} ya está en uso. El servidor ya está corriendo.")
+            return
+
         try:
+            #creamos un socket tcp sobre ipv4
             self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            # esto permite reutilizar la dirección y puerto sin esperar TIME_WAIT.
+            self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # quitar en la entrega final
+            # asocia el socket a la ip y puerto definidos.
             self.server_socket.bind((self.host, self.port))
-            self.server_socket.listen(5)
+            #soporta hasta 2 conexioens por si acaso
+            self.server_socket.listen(2)
             self.running = True
             logger.info(f"Servidor TCP iniciado en {self.host}:{self.port}")
 
@@ -44,7 +61,7 @@ class TCPServer:
             self.stop()
 
     def _handle_client(self, client_socket, address):
-        """Maneja la conexión con un cliente"""
+        """maneja la conexión con un cliente"""
         try:
             while True:
                 data = client_socket.recv(1024)
@@ -52,11 +69,13 @@ class TCPServer:
                     break
                     
                 message = data.decode()
-                logger.info(f"Mensaje recibido de {address}: {message}")
+                client_ip, client_port = address
+                timestamp = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+                logger.info(f"Mensaje recibido desde la IP {client_ip} puerto {client_port}.")
+                logger.info(f"Tiempo de recepción: {timestamp}")
                 
                 response = f"Confirmación recibida: {message}"
                 client_socket.sendall(response.encode())
-                logger.info(f"Respuesta enviada a {address}")
                 
         except Exception as e:
             logger.error(f"Error al manejar cliente {address}: {e}")
@@ -65,7 +84,7 @@ class TCPServer:
             logger.info(f"Conexión cerrada con {address}")
 
     def stop(self):
-        """Detiene el servidor TCP"""
+        """detiene el servidor TCP"""
         self.running = False
         if self.server_socket:
             self.server_socket.close()

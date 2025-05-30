@@ -6,7 +6,7 @@ import logging
 import time
 from datetime import datetime
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
 
 class BaseClient:
@@ -14,20 +14,28 @@ class BaseClient:
         self.host = host
         self.socket = None
         self.message_count = 0
+        self.server_ip = None
+        self.server_port = None
+
+    def _get_server_info(self):
+        """Obtiene la información del servidor después de la conexión"""
+        if self.socket:
+            self.server_ip, self.server_port = self.socket.getpeername()
+            return True
+        return False
 
     def _log_message_info(self, message, is_sending=True):
-        """Registra información común de los mensajes"""
+        """registra info"""
         timestamp = datetime.now().strftime('%H:%M:%S.%f')[:-3]
         if is_sending:
-            logger.info(f"Mensaje #{self.message_count} enviado: {message}")
-            logger.info(f"IP destino: {self.host}")
-            logger.info(f"Puerto destino: {self.port}")
-            logger.info(f"Timestamp envío: {timestamp}")
-        else:
-            logger.info(f"Timestamp recepción: {timestamp}")
+            logger.info(f"Mensaje: {message}")
+            if self._get_server_info():
+                logger.info(f"IP de destino: {self.server_ip}")
+                logger.info(f"Puerto de destino: {self.server_port}")
+            logger.info(f"Tiempo de envío: {timestamp}")
 
     def _log_rtt(self, start_time, end_time):
-        """Registra el tiempo de respuesta"""
+        """registra el tiempo de respuesta"""
         rtt = (end_time - start_time)*1000
         logger.info(f"RTT: {rtt:.2f}ms")
 
