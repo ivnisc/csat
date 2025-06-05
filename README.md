@@ -1,5 +1,4 @@
 # CSAT - Cliente-Servidor de Análisis de Tráfico
-# CSAT - Client-Server Traffic Analysis
 
 ## Instalación / Installation
 
@@ -23,6 +22,7 @@ pip install textual
 ## Uso / How to use
 
 Para ejecutar la aplicación CSAT, utiliza el siguiente comando:
+
 To run the CSAT app, use the following command:
 
 ```bash
