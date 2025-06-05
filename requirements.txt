@@ -1,2 +1,1 @@
-psutil>=5.9.0
-textual>=0.100.0
+textual>=3.2.0
