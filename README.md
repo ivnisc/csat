@@ -1,13 +1,16 @@
-# CSAT - Cliente-Servidor de Análisis de Tráfico
 
-## Instalación / Installation
+<h3 align="center">
+	CSAT - Cliente-Servidor de Análisis de Tráfico
+</h3>
 
-### Opción 1: Instalación Global / Option 1: Global Installation
+### Instalación / Installation
+
+#### Opción 1: Instalación Global / Option 1: Global Installation
 ```bash
 pip install textual
 ```
 
-### Opción 2: Instalación en Entorno Virtual / Option 2: Virtual Environment Installation
+#### Opción 2: Instalación en Entorno Virtual / Option 2: Virtual Environment Installation
 ```bash
 # Crear entorno virtual / Create virtual environment
 python -m venv venv
@@ -19,7 +22,7 @@ source venv/bin/activate
 pip install textual
 ```
 
-## Uso / How to use
+### Uso / How to use
 
 Para ejecutar la aplicación CSAT, utiliza el siguiente comando:
 
@@ -29,7 +32,7 @@ To run the CSAT app, use the following command:
 python src/ui/app2.py
 ```
 
-## Funciones / Features
+### Funciones / Features
 
 - Interfaz gráfica basada en Textual / Textual-based graphical interface
 - Soporte para protocolos TCP y UDP / TCP and UDP protocol support
@@ -38,7 +41,7 @@ python src/ui/app2.py
   
 <img width="983" alt="csat" src="https://github.com/user-attachments/assets/7f72ec88-4b5c-4473-9545-5342be432dee" />
 
-## Próximamente / Next Features
+### Próximamente / Next Features
 
 - Soporte para interfaz de red externa (0.0.0.0) / External network interface support
 - Configuración personalizada de puertos / Custom port config
