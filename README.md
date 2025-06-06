@@ -26,7 +26,7 @@ Para ejecutar la aplicación CSAT, utiliza el siguiente comando:
 To run the CSAT app, use the following command:
 
 ```bash
-python csat/ui/app2.py
+python src/ui/app2.py
 ```
 
 ## Funciones / Features
