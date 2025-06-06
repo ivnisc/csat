@@ -35,6 +35,8 @@ python src/ui/app2.py
 - Soporte para protocolos TCP y UDP / TCP and UDP protocol support
 - Monitoreo de tráfico en tiempo real / Real-time traffic monitoring
 - Análisis de paquetes y conexiones / Packet and connection analysis
+  
+<img width="983" alt="csat" src="https://github.com/user-attachments/assets/7f72ec88-4b5c-4473-9545-5342be432dee" />
 
 ## Próximamente / Next Features
 
